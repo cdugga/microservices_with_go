@@ -16,15 +16,15 @@ type propertySource struct {
 	Source 	map[string]interface{}
 }
 
-func LoadConfiguration(){
-	localConfig()
+func LoadConfiguration(s string){
+	localConfig(s)
 
 }
 
-func localConfig(){
+func localConfig(s string){
 	viper.SetConfigName("application-local")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath("../")
+	viper.AddConfigPath(s)
 
 	path, _ := os.Getwd()
 	fmt.Println("---------", path)
