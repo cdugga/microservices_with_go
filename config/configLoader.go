@@ -18,12 +18,13 @@ type propertySource struct {
 
 func LoadConfiguration(){
 	localConfig()
+
 }
 
 func localConfig(){
 	viper.SetConfigName("application-local")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
+	viper.AddConfigPath("../")
 
 	path, _ := os.Getwd()
 	fmt.Println("---------", path)

@@ -15,8 +15,6 @@ func init(){
 	viper.Set("profile", *profile)
 }
 
-
-
 func main(){
 	fmt.Println("Hello")
 	config.LoadConfiguration()
