@@ -1,0 +1,5 @@
+propertySources:
+  name: local
+  source:
+    endpointa: somea
+    endpointb: someb
