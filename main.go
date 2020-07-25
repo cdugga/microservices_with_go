@@ -20,6 +20,6 @@ func init(){
 }
 
 func main(){
-	config.LoadConfiguration(basepath)
+	config.LoadConfiguration(basepath, profile)
 }
 

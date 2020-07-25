@@ -8,8 +8,8 @@ import (
 func TestLocalConfig(t *testing.T){
 
 	LoadConfiguration("../")
-	s := viper.GetString("propertySources.source.endpointa")
-	if len(s) <= 0 {
+	s := viper.IsSet("propertySources.source.endpointa")
+	if s != true {
 		t.Fatal("Expected param not found")
 	}
 	t.Log("Fetched param successfully")

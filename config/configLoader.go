@@ -1,10 +1,8 @@
 package config
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 	"log"
-	"os"
 )
 
 type lConfig struct{
@@ -16,9 +14,8 @@ type propertySource struct {
 	Source 	map[string]interface{}
 }
 
-func LoadConfiguration(s string){
-	localConfig(s)
-
+func LoadConfiguration(s string, profile string){
+	if profile == DEV{ localConfig(s); unmarshal(); }
 }
 
 func localConfig(s string){
@@ -26,8 +23,6 @@ func localConfig(s string){
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(s)
 
-	path, _ := os.Getwd()
-	fmt.Println("---------", path)
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			panic("Config file was not found: " + err.Error())
@@ -35,7 +30,9 @@ func localConfig(s string){
 			panic("Config file found but another error was encountered: " + err.Error())
 		}
 	}
+}
 
+func unmarshal(){
 	var environment lConfig
 	err := viper.Unmarshal(&environment)
 	if err!=nil {
@@ -43,5 +40,4 @@ func localConfig(s string){
 	}
 	log.Printf("Local environment configuration successfully parsed")
 }
-
 
