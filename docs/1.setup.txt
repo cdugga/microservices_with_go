@@ -1,3 +1,8 @@
 Reading local or remote config files
 
-Viper library provides a mechanism to locate and parse local or remote configuration files using
+Viper library provides a mechanism to locate and parse local or remote configuration files.
+
+When reading files on the classpath it uses a buffered reader.
+buf := bytes.NewBuffer(make([]byte, 0, capacity))
+
+When reading from remote sources it uses
