@@ -29,7 +29,11 @@ func localConfig(s string){
 	path, _ := os.Getwd()
 	fmt.Println("---------", path)
 	if err := viper.ReadInConfig(); err != nil {
-		panic("Error reading local config file: " + err.Error())
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			panic("Config file was not found: " + err.Error())
+		}else {
+			panic("Config file found but another error was encountered: " + err.Error())
+		}
 	}
 
 	var environment lConfig
