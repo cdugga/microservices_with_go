@@ -29,8 +29,8 @@ type propertySource struct {
 	Source 	map[string]interface{} `json:"source"`
 }
 
-func LoadConfiguration(s string, profile string){
-	if profile == DEV { var environment lConfig; localConfig(s); unmarshal(&environment) }
+func LoadConfiguration(s string, profile string, l *log.Logger){
+	if profile == DEV { var environment lConfig; localConfig(s); unmarshal(&environment, l) }
 
 }
 
@@ -48,12 +48,12 @@ func localConfig(s string){
 	}
 }
 
-func unmarshal(v interface{}){
+func unmarshal(v interface{}, l *log.Logger){
 	err := viper.Unmarshal(v)
 	if err!=nil {
 		log.Fatalf("Unable parse local config")
 	}
-	log.Printf("Local environment configuration successfully parsed")
+	l.Printf("Local environment configuration successfully parsed")
 }
 
 func basicAuthHeader()string{
