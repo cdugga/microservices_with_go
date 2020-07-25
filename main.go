@@ -20,6 +20,6 @@ func init(){
 }
 
 func main(){
-	config.LoadConfiguration(basepath, profile)
+	config.LoadConfiguration(basepath, viper.GetString("profile"))
 }
 
