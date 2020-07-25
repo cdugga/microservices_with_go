@@ -2,6 +2,8 @@ package config
 
 import (
 	"encoding/base64"
+	"encoding/json"
+	"fmt"
 	"github.com/spf13/viper"
 	"io/ioutil"
 	"log"
@@ -71,5 +73,19 @@ func remoteConfig()([]byte, error){
 }
 
 func parseRemote(body []byte){
+
+	var environment sConfig
+	err := json.Unmarshal(body, &environment)
+	if err !=nil { panic("Cannot parse configuration, message: " + err.Error())}
+
+	for key, value := range environment.PropertySource[0].Source {
+		viper.Set(key, value)
+		fmt.Printf("Loading config property %v => %v\n",key, value)
+	}
+	if viper.IsSet("server_name"){
+		fmt.Printf("Successfully loaded configuration for service %s\n", viper.GetString("server_name"))
+	}
+
+
 
 }
