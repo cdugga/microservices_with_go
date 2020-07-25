@@ -1,26 +1,36 @@
 package config
 
 import (
+	"encoding/base64"
 	"github.com/spf13/viper"
+	"io/ioutil"
 	"log"
+	"net/http"
 )
+
+
+type sConfig struct{
+	Name 	string	`json:"name"`
+	Profiles	[]string `json:"profiles"`
+	Label	interface{} `json:"label"`
+	Version	interface{} `json:"version"`
+	State	interface{} `json:"state"`
+	PropertySource []propertySource `json:"propertySource"`
+}
 
 type lConfig struct{
 	PropertySource []propertySource
 }
 
 type propertySource struct {
-	Name 	string
-	Source 	map[string]interface{}
+	Name 	string	`json:"name"`
+	Source 	map[string]interface{} `json:"source"`
 }
 
 func LoadConfiguration(s string, profile string){
-	if profile == DEV{ var environment lConfig; localConfig(s); unmarshal(&environment) }
-
+	if profile == DEV { var environment lConfig; localConfig(s); unmarshal(&environment) }
 
 }
-
-
 
 func localConfig(s string){
 	viper.SetConfigName("application-local")
@@ -36,9 +46,7 @@ func localConfig(s string){
 	}
 }
 
-
 func unmarshal(v interface{}){
-
 	err := viper.Unmarshal(v)
 	if err!=nil {
 		log.Fatalf("Unable parse local config")
@@ -46,3 +54,22 @@ func unmarshal(v interface{}){
 	log.Printf("Local environment configuration successfully parsed")
 }
 
+func basicAuthHeader()string{
+	return base64.StdEncoding.EncodeToString([]byte(":"))
+}
+
+func remoteConfig()([]byte, error){
+	req, err := http.NewRequest(http.MethodGet, "", nil)
+	req.Header.Add("Authorization", "Basic " + basicAuthHeader())
+
+	resp, err := Client.Do(req)
+	if err!= nil {
+		panic("Failed reading remote configuration. Shutting down:" + err.Error())
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	return body, err
+}
+
+func parseRemote(body []byte){
+
+}
