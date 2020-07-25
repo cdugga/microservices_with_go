@@ -56,7 +56,7 @@ func createServer(sm *mux.Router)http.Server{
 	ch := gohandlers.CORS(gohandlers.AllowedOrigins([]string{"*"}))
 
 	return http.Server{
-		Addr: ":8081",
+		Addr: ":8080",
 		Handler: ch(sm),
 		IdleTimeout: 120*time.Second,
 		ReadTimeout: 5*time.Second,
@@ -67,9 +67,9 @@ func createServer(sm *mux.Router)http.Server{
 func createServerMux() *mux.Router {
 	sm := mux.NewRouter()
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/helloworld", controllers.HelloWorldHandler)
+	getRouter.HandleFunc("/cryptoprices", controllers.HelloWorldHandler)
 
-	opts := middleware.RedocOpts{SpecURL: "/helloworld/swagger.json"}
+	opts := middleware.RedocOpts{SpecURL: "/cryptoprices/swagger.json"}
 	sh := middleware.Redoc(opts, nil)
 
 	getRouter.Handle("/docs", sh)
@@ -81,7 +81,6 @@ func main(){
 	logger := log.New(os.Stdout, "demo.api", log.LstdFlags)
 
 	config.LoadConfiguration(basepath, viper.GetString("profile"), logger)
-
 	fmt.Println(viper.IsSet("propertySources.source.endpointa"))
 
 	sm := createServerMux()
