@@ -15,8 +15,12 @@ type propertySource struct {
 }
 
 func LoadConfiguration(s string, profile string){
-	if profile == DEV{ localConfig(s); unmarshal(); }
+	if profile == DEV{ var environment lConfig; localConfig(s); unmarshal(&environment) }
+
+
 }
+
+
 
 func localConfig(s string){
 	viper.SetConfigName("application-local")
@@ -32,9 +36,10 @@ func localConfig(s string){
 	}
 }
 
-func unmarshal(){
-	var environment lConfig
-	err := viper.Unmarshal(&environment)
+
+func unmarshal(v interface{}){
+
+	err := viper.Unmarshal(v)
 	if err!=nil {
 		log.Fatalf("Unable parse local config")
 	}
