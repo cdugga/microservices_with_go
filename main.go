@@ -48,7 +48,8 @@ func startServer(s http.Server, l *log.Logger){
 		if err != nil{
 			l.Fatal(err)
 		}
-	}
+		l.Println("Started server")
+	}()
 }
 
 func createServer(sm *mux.Router)http.Server{
